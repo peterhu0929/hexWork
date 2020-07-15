@@ -1,0 +1,193 @@
+@font-face {
+  font-family: jf-jinxuan-bold;
+  src: local("Arial Regular"),
+  url(/assets/font/jf-jinxuan-bold.otf)
+}
+@font-face {
+  font-family: jf-jinxuan-book;
+  src: local("Arial Regular"),
+  url(/assets/font/jf-jinxuan-book.otf)
+}
+.card {
+  width: 530px;
+  height: 550px;
+  /* border: 1px solid grey; */
+  /* border-radius: 10px; */
+  overflow: hidden;
+  background-color:white;
+  /* background-color:rgba(255,255,255,0.3); */
+  background-size: 90px 90px;
+  /* background-repeat: repeat; */
+}
+.card-top{
+  height: 152px;
+  background-color:lightskyblue;
+}
+.card-product-img{
+  display: flex;
+  justify-content: center;
+  margin-top: 29px;
+  /* margin-bottom: 29px; */
+}
+.card-content{
+  display: flex;
+  align-items:center;
+  flex-direction:column;
+  padding-top: 5px; 
+  margin-top: 210px;
+  /* margin-bottom: 10px; */
+}
+/* .card-space{
+  margin-top: 5px;
+  margin-bottom: 5px;
+} */
+.card-bottom{
+  display: flex;
+  justify-content: space-around;
+  /* font-size:9px; */
+  /* margin-top: 80px; */
+  /* position: relative; */
+  margin-top: 29px;
+  margin-bottom: 22px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+.card-title {
+  margin-top: 30px;
+  font-size: 60px;
+  display: flex;
+  justify-content: center;
+  font-family: jf-jinxuan-bold;
+}
+.content-price{
+  font-size: 30px;
+  font-family: jf-jinxuan-bold;
+}
+.content-origin-price {
+  font-size: 20.5px;
+  font-family: jf-jinxuan-book;
+}
+.content-content {
+  font-size: 17px;
+  font-family: jf-jinxuan-book;
+}
+.bottom-id{
+  font-size: 19px;
+  font-family: jf-jinxuan-bold;
+}
+.bottom-date{
+  font-size: 19px;
+  font-family: "Arial Regular";
+ 
+}
+.bottom-time{
+  font-size: 19px;
+  font-family: "Arial Regular";
+ 
+}
+
+
+
+
+
+.logo-img{
+  margin-top: 51px;
+  margin-left:90px; 
+  margin-bottom:51px; 
+  width: 150px;
+  position: absolute;
+  z-index: 1;
+}
+.product-img{
+margin-bottom: 29px;
+width: 200px;
+height: 200px;
+/* background-position: center; */
+/* background-size: cover; */
+border-radius: 50%;
+position: absolute;
+z-index: 1;
+}
+/* img {
+position: absolute;
+z-index: 1;
+} */
+.store-title{
+  font-family: "微軟正黑體";
+  font-weight: bold;
+  font-size: 21.7px;
+  margin-top: 35px;
+  margin-bottom: 35px;
+}
+.store{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  width: 330px;
+  min-height: 60px;
+  /* border: 0.5px solid #333; */
+  background-color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 1px;
+  padding-bottom: 5px;
+  /* border-radius: 10px; */
+  
+}
+.store-name{
+  margin-top: 5px;
+  font-family: "微軟正黑體";
+  font-weight: bold;
+  font-size: 21px;
+}
+.store-content{
+  font-family: "微軟正黑體";
+  font-size: 16px;
+  /* margin-bottom: 5px; */
+}
+.store-feature{
+  font-family: "微軟正黑體";
+  font-size: 16px;
+  /* margin-bottom: 5px; */
+}
+.nav-tabs{
+  background: lightgrey;
+}
+.nav-item
+{
+  font-size:60px;
+}
+.nav-link{
+  color: white;
+}
+
+.profile-img {
+  /* margin-bottom: 29px; */
+  width: 200px;
+  /* height: 200px; */
+  /* background-position: center; */
+  /* background-size: cover; */
+  border-radius: 50%;
+  /* position: absolute; */
+  /* z-index: 1; */
+}
+
+
+
+
+
+
+body {
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #e6e6e6;
+}
+*{
+  margin:0;
+  padding: 0;
+  box-sizing:border-box;
+}

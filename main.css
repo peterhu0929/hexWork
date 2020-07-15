@@ -1,0 +1,35 @@
+@font-face {
+  font-family: jf-jinxuan-bold;
+  src: local("Arial Regular"),
+  url(assets/font/jf-jinxuan-bold.otf)
+}
+@font-face {
+  font-family: jf-jinxuan-book;
+  src: local("Arial Regular"),
+  url(assets/font/jf-jinxuan-book.otf)
+}
+
+.title {
+  font-family: jf-jinxuan-bold;
+  font-size: xx-large;
+}
+.link-style {
+  display: flex;
+  flex-direction: column;
+  font-size: large;
+}
+body {
+  /* padding: 60px 0; */
+  display: block;
+  margin:10% 10% 10% 10%;
+  /* justify-content: center;
+  align-items: center;
+  flex-direction: column; */
+  background: white;
+  font-family: jf-jinxuan-book;
+}
+/* *{
+  margin:0;
+  padding: 0;
+  box-sizing:border-box;
+}  */

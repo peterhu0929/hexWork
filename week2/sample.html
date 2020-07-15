@@ -1,0 +1,61 @@
+<html>
+
+<head>
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <link rel="stylesheet" type="text/css" href="hexWork.css">
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+
+    <title>Simple Hello Vue.js Application</title>
+</head>
+
+<body>
+    <div class="conatiner">
+        <div class="ml-5 mt-5">
+            <div class="col-sm-6 card bg-info text-white">
+                <div class="card-header">Simple Hello Vue.js Application</div>
+                <!-- <div class="card-body" id="app">{{ message }} -->
+            </div>
+            <div class="card-footer card-link">powered by : <a href="https://www.uibootstrap.net">uibootstrap.net</a>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div id="app">
+        {{tabTitleClass}}
+        <b-tabs>
+
+            <b-tab title="first" active>
+                <br>I'm the first tab66666
+            </b-tab>
+
+            <b-tab title="second">
+                <br>I'm the second tab
+            </b-tab>
+
+            <b-tab title="Infinity War">
+                <br>Trailer tomorrow!
+            </b-tab>
+
+        </b-tabs>
+
+    </div>
+</body>
+
+
+
+</html>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!',
+            tabTitleClass: {
+                'background': 'red',
+                'font-size': '23px'
+            }
+        }
+    })
+</script>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="hexWork.css" />
+ 
+    <!-- <script src="hexWork.js"></script> -->
+    <title>第二周主線任務</title>
+  </head>
+  <body>
+    <button id="get" class="btn btn-primary">Get</button>
+    <div id="app"></div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </body>
+</html>
+<script>
+  
+  var obj = {
+    data: {
+      uuid: "ffbdeffe-575b-496a-aa39-71b48c4fe29d",
+      token: "",
+      apiPath: "https://course-ec-api.hexschool.io/",
+      ProductList: [],
+    },
+    getData() {
+      var getURL = `${obj.data.apiPath}api/${obj.data.uuid}/ec/products`;
+       console.log(getURL);
+      axios.get(getURL).then((res) => {
+        // console.log(res);
+        obj.data.ProductList = res.data.data;
+        console.log(obj.data.ProductList);
+        obj.render();
+      });
+    },
+    render() {
+      var app = document.querySelector("#app");
+      var view = "";
+      this.data.ProductList.forEach(x => {
+        view += `
+        <div class="card">
+        <div class="card-top">
+           <div class="card-title">${x.title}</div>
+        </div>
+        <div class="card-product-img">
+            <img src=${x.imageUrl[0]} class="product-img">
+        </div>
+        <div class="card-content">
+            <div class="content-price">特價${x.price} </div>
+            <div class="content-origin-price">原價${x.origin_price} </div>
+            <div class="content-content">${x.content}</div>
+        </div>
+      </div><br>`
+      });
+      app.innerHTML = view;
+    },
+  };
+  document.querySelector("#get").addEventListener("click", obj.getData);
+  obj.getData();
+</script>

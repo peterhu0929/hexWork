@@ -1,0 +1,47 @@
+/* @font-face {
+  font-family: jf-jinxuan-bold;
+  src: local("Arial Regular"),
+  url(/assets/font/jf-jinxuan-bold.otf)
+}
+@font-face {
+  font-family: jf-jinxuan-book;
+  src: local("Arial Regular"),
+  url(/assets/font/jf-jinxuan-book.otf)
+} */
+@import '/main.css';
+/* @import './login.css'; */
+
+table tr th {
+   vertical-align: bottom;
+   border-bottom: 2px solid #da0860;
+ }
+table th,
+table td {
+   padding: 0.75rem;
+   vertical-align: top; 
+ }
+
+ /* 儲存格單列變色 */
+tbody tr:nth-of-type(odd) {
+   background-color: rgba(163, 7, 7, 0.05);
+ }
+
+tbody tr:hover {
+  color: #000000;
+  background-color: rgba(255, 0, 0, 0.2); 
+  font-size: 16px;
+  font-weight: bold;
+}
+table {
+     width: 100%;
+   }
+
+.modal-title{
+  color: white;
+}
+strong{
+  color: red;
+}
+.title{
+  font-family: jf-jinxuan-bold;
+}
