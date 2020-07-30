@@ -1,3 +1,9 @@
+import pagination from './pagination.js';
+import modal from './modal.js';
+
+Vue.component("pagination", pagination);
+Vue.component("modal", modal);
+
 new Vue({
     el: "#app",
     data: {
@@ -9,58 +15,13 @@ new Vue({
         userData: {
             apiPath: "https://course-ec-api.hexschool.io/",
             uuid: "ffbdeffe-575b-496a-aa39-71b48c4fe29d",
-            token: ""
+            token: "",
         },
-        products: [{
-                id: 1586934917210,
-                unit: "台",
-                category: "公路車",
-                title: "Giant TCR",
-                origin_price: 168000,
-                price: 128000,
-                description: "整合式低風阻能量補給系統",
-                content: "為競賽而生的優越空氣動力效能",
-                is_enabled: true,
-                imageUrl: "https://images.unsplash.com/photo-1525379241313-7d584a5c09a6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=646&q=80",
-                options: {
-                    stars: 4,
-                    comments: "為競賽而生的顛峰之作",
-                },
-            },
-            {
-                id: 1196934918888,
-                unit: "台",
-                category: "三鐵車",
-                title: "Canyon Speedmax CF SLX 9.0",
-                origin_price: 271600,
-                description: "同級最強規格",
-                content: "成為全世界最快的三鐵車",
-                price: 200000,
-                is_enabled: false,
-                imageUrl: "https://images.unsplash.com/photo-1516820612845-a13894592046?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-                options: {
-                    stars: 3,
-                    comments: "性價比最高之工藝品",
-                },
-            },
-            {
-                id: 1196934916666,
-                unit: "台",
-                category: "公路車",
-                title: "Argon 18 gallium pro",
-                origin_price: 275800,
-                description: "為爬坡而生",
-                content: "眾所皆知的環法車隊Astana所御用的系列車款",
-                price: 168000,
-                is_enabled: false,
-                imageUrl: "https://images.unsplash.com/photo-1533993067574-2d5100bd88fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1347&q=80",
-                options: {
-                    stars: 5,
-                    comments: "完美的藝術品",
-                },
-            },
-        ],
-        metaProduct: {},
+        products: [],
+        productsPagination: {},
+        metaProduct: {
+            imageUrl: []
+        },
     },
     created() {
         this.userData.token = document.cookie.replace(
@@ -76,7 +37,7 @@ new Vue({
         }
     },
     methods: {
-        signin() {
+        signIn() {
             // console.log(this.user);
             const apiURL = `https://course-ec-api.hexschool.io/api/auth/login`;
             axios
@@ -90,7 +51,7 @@ new Vue({
                     document.cookie = `token=${token};expires=${new Date(
             expired * 1000
           )}; path=/`;
-                    window.location = './product.html';
+                    window.location = "./product.html";
                 })
                 .catch((error) => {
                     alert(error);
@@ -100,14 +61,17 @@ new Vue({
             switch (action) {
                 case "isAdd":
                     {
-                        this.metaProduct = {};
+                        this.metaProduct = { imageUrl: [] };
                         $("#productModal").modal("show");
                         break;
                     }
                 case "isEdit":
                     {
-                        this.metaProduct = JSON.parse(JSON.stringify(item));
-                        $("#productModal").modal("show", item);
+                        const apiURL = `${this.userData.apiPath}api/${this.userData.uuid}/admin/ec/product/${item.id}`;
+                        axios.get(apiURL).then((res) => {
+                            this.metaProduct = res.data.data,
+                                $("#productModal").modal("show");
+                        });
                         break;
                     }
                 case "isDelete":
@@ -126,35 +90,27 @@ new Vue({
                     break;
             }
         },
-        getData() {
-            const apiURL = `${this.userData.apiPath}api/${this.userData.uuid}/ec/products`;
+        getData(num = 1) {
+            console.log(num);
+            const apiURL = `${this.userData.apiPath}api/${this.userData.uuid}/admin/ec/products?page=${num}`;
             axios.get(apiURL).then((res) => {
-                console.log(res);
-            });
-        },
-        addProduct(item) {
-            item.id = Date.now();
-            this.products.unshift(item);
-            console.log(item);
-            $("#productModal").modal("hide");
-        },
-        updateProduct(item) {
-            this.products.forEach((x, i) => {
-                if (x.id === item.id) {
-                    this.products.splice(i, 1, item);
+                this.products = res.data.data;
+                this.productsPagination = res.data.meta.pagination;
+                if (this.metaProduct) {
+                    this.metaProduct = { imageUrl: [] };
+                    $("#productModal").modal("hide");
                 }
             });
-            console.log(item);
-            $("#productModal").modal("hide");
         },
         deleteProduct(item) {
             if (item.id) {
-                this.products.forEach((x, i) => {
-                    if (x.id === item.id) {
-                        this.products.splice(i, 1);
-                    }
+                const apiURL = `${this.userData.apiPath}api/${this.userData.uuid}/admin/ec/product/${item.id}`;
+                axios.delete(apiURL, item.id).then((res) => {
+                    console.log(res);
+                    this.getData();
+                    $("#deleteModal").modal("hide");
                 });
-                $("#deleteModal").modal("hide");
+
             }
         },
     },
