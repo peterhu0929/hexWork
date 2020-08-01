@@ -30,11 +30,12 @@ new Vue({
         );
         // 預設帶入 token
         axios.defaults.headers.common.Authorization = `Bearer ${this.userData.token}`;
-        if (this.userData.token === "") {
-            window.location = "./Login.html";
-        } else {
-            this.getData();
-        }
+        // if (!this.userData.token) {
+        //     window.location = "./Login.html";
+        // } else {
+        //     this.getData();
+        // }
+        this.getData();
     },
     methods: {
         signIn() {
@@ -49,8 +50,8 @@ new Vue({
                     console.log(res.data.uuid);
                     // write cookie & expire date
                     document.cookie = `token=${token};expires=${new Date(
-            expired * 1000
-          )}; path=/`;
+                                expired * 1000
+                                    )}; path=/`;
                     window.location = "./product.html";
                 })
                 .catch((error) => {
@@ -78,12 +79,6 @@ new Vue({
                     {
                         this.metaProduct = JSON.parse(JSON.stringify(item));
                         $("#deleteModal").modal("show");
-                        break;
-                    }
-                case "isOptions":
-                    {
-                        this.metaProduct = JSON.parse(JSON.stringify(item));
-                        $("#optionsModal").modal("show");
                         break;
                     }
                 default:
