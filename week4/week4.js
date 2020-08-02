@@ -52,7 +52,7 @@ new Vue({
                     document.cookie = `token=${token};expires=${new Date(
                                 expired * 1000
                                     )}; path=/`;
-                    window.location = "./product.html";
+                    window.location = "./Product.html";
                 })
                 .catch((error) => {
                     alert(error);
