@@ -1,87 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3/dist/vue-loading.css"
+      rel="stylesheet"
+    />
+
     <link rel="stylesheet" type="text/css" href="week4.css" />
     <title>第四周主線任務</title>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <div id="app">
-        <h3 class="title">{{message}}</h3>
-        <button class="btn btn-primary btn-lg" style="float: right;" @click="openModal('isAdd')">
+      <h3 class="title">{{message}}</h3>
+      <loading :active.sync="isLoading"></loading>
+      <button
+        class="btn btn-primary btn-lg"
+        style="float: right;"
+        @click="openModal('isAdd')"
+      >
         新增產品
       </button>
-        <h3>本頁有{{this.products.length}}筆</h3>
-        <table class="table mt-4">
-            <thead>
-                <tr>
-                    <!-- <th>No.</th> -->
-                    <th>分類</th>
-                    <th>產品名稱</th>
-                    <th>原價</th>
-                    <th>售價</th>
-                    <th>啟用(Y/N)</th>
-                    <th>編輯</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(item,key) in products" :key="item.id">
-                    <!-- <td>{{key+1}}</td> -->
-                    <td>{{item.category}}</td>
-                    <td>{{item.title}}</td>
-                    <td>{{item.origin_price}}</td>
-                    <td>{{item.price}}</td>
-                    <td>
-                        <input type="checkbox" v-model="item.enabled" disabled />
-                        <span v-if="item.enabled" style="color: green;">啟用</span>
-                        <span v-else>停用</span>
-                    </td>
-                    <td>
-                        <button class="btn btn-outline-primary btn-sm" @click="openModal('isEdit',item)">
+      <h3>本頁有{{this.products.length}}筆</h3>
+      <table class="table mt-4">
+        <thead>
+          <tr>
+            <!-- <th>No.</th> -->
+            <th>分類</th>
+            <th>產品名稱</th>
+            <th>原價</th>
+            <th>售價</th>
+            <th>啟用(Y/N)</th>
+            <th>編輯</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item,key) in products" :key="item.id">
+            <!-- <td>{{key+1}}</td> -->
+            <td>{{item.category}}</td>
+            <td>{{item.title}}</td>
+            <td>{{item.origin_price}}</td>
+            <td>{{item.price}}</td>
+            <td>
+              <input type="checkbox" v-model="item.enabled" disabled />
+              <span v-if="item.enabled" style="color: green;">啟用</span>
+              <span v-else>停用</span>
+            </td>
+            <td>
+              <button
+                class="btn btn-outline-primary btn-sm"
+                @click="openModal('isEdit',item)"
+              >
                 編輯
               </button>
-                        <button class="btn btn-outline-danger btn-sm" @click="openModal('isDelete', item)">
+              <button
+                class="btn btn-outline-danger btn-sm"
+                @click="openModal('isDelete', item)"
+              >
                 刪除
               </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <pagination :pages="productsPagination" @change="getData"></pagination>
-        <!-- Modal -->
-        <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <modal :user-Data="this.userData" :meta-Product="this.metaProduct" @refresh="getData"></modal>
-        </div>
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h5 class="modal-title" id="exampleModalLabel">刪除產品</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-                    </div>
-                    <div class="modal-body">
-                        <h4>確定刪除<strong>{{metaProduct.title}}</strong>嗎?</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-danger" @click="deleteProduct(metaProduct)">確定刪除</button>
-                    </div>
-                </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination :pages="productsPagination" @change="getData"></pagination>
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="productModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <modal
+          :user-Data="this.userData"
+          :meta-Product="this.metaProduct"
+          @refresh="getData"
+        ></modal>
+      </div>
+      <div
+        class="modal fade"
+        id="deleteModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-danger">
+              <h5 class="modal-title" id="exampleModalLabel">刪除產品</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
+            <div class="modal-body">
+              <h4>確定刪除<strong>{{metaProduct.title}}</strong>嗎?</h4>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                取消
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="deleteProduct(metaProduct)"
+              >
+                確定刪除
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3"></script>
     <script src="week4.js" type="module"></script>
-</body>
-
+  </body>
 </html>
