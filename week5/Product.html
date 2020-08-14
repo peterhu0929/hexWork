@@ -1,31 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" type="text/css" href="week5.css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3/dist/vue-loading.css"
-      rel="stylesheet"
-    />
-    <title>第五周主線任務</title>
-  </head>
 
-  <body>
-    <div id="app">
-      <h3 class="title">{{message}}</h3>
-      <loading :active.sync="isLoading"></loading>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3"></script>
-    <script src="week5.js" type="module"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="week5.css" />
+  <link href="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3/dist/vue-loading.css" rel="stylesheet" />
+  <title>第五周主線任務</title>
+</head>
+
+<body>
+  <div id="app">
+    <h3 class="title">{{message}}</h3>
+    <loading :active.sync="isLoading"></loading>
+    <validation-observer v-slot="{ invalid }">
+      <form @submit.prevent="submitForm">
+        <validation-provider rules="required" v-slot="{ errors ,classes }">
+          <label for="email">收件人姓名</label>
+          <input type="text" name="userName" v-model="formData.userName" class="form-control" :class="classes" />
+          <span class="invalid-feedback">{{ errors[0] }}</span>
+        </validation-provider>
+        <validation-provider rules="required|email" v-slot="{ errors ,classes }">
+          <label for="email">Email</label>
+          <input type="email" name="email" v-model="formData.email" class="form-control" :class="classes" />
+          <span class="invalid-feedback">{{ errors[0] }}</span>
+        </validation-provider>
+        <validation-provider rules="required|min:8" v-slot="{ errors ,classes }">
+          <label for="email">電話</label>
+          <input type="tel" name="phone" v-model="formData.phone" class="form-control" :class="classes" />
+          <span class="invalid-feedback">{{ errors[0] }}</span>
+        </validation-provider>
+        <validation-provider rules="required" v-slot="{ errors ,classes }">
+          <label for="email">地址</label>
+          <input type="text" name="address" v-model="formData.address" class="form-control" :class="classes" />
+          <span class="invalid-feedback">{{ errors[0] }}</span>
+        </validation-provider>
+        <!-- 送出表單使用 submit 的方法，如果驗證未通過則 disabled 該按鈕 -->
+        <button type="submit" class="btn btn-info" :disabled="invalid">送出</button>
+      </form>
+    </validation-observer>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/3.3.0/vee-validate.full.min.js"></script>
+  <script src="week5.js" type="module"></script>
+</body>
+
 </html>

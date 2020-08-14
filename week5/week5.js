@@ -1,16 +1,28 @@
-import pagination from "./pagination.js";
-import modal from "./modal.js";
+// import pagination from "./pagination.js";
+// import modal from "./modal.js";
+import zh_TW from "./zh_TW.js";
+// 自定義設定檔案，錯誤的 className
+VeeValidate.configure({
+  classes: {
+    valid: "is-valid",
+    invalid: "is-invalid",
+  },
+});
+// 加入至 VeeValidate 的設定檔案
+VeeValidate.localize('tw', zh_TW);
 
-Vue.use(VueLoading);
-Vue.component("pagination", pagination);
-Vue.component("modal", modal);
+// 註冊在Vue的藍圖、原型
+// Vue.use(VueLoading);
 Vue.component("loading", VueLoading);
+// 將 VeeValidate input 驗證工具載入 作為全域註冊
+Vue.component('ValidationProvider', VeeValidate.ValidationProvider);
+// 將 VeeValidate 完整表單 驗證工具載入 作為全域註冊
+Vue.component('ValidationObserver', VeeValidate.ValidationObserver);
 
 new Vue({
   el: "#app",
   data: {
     message: "表單驗證",
-    isLoading: false,
     user: {
       email: "",
       password: "",
@@ -20,88 +32,24 @@ new Vue({
       uuid: "ffbdeffe-575b-496a-aa39-71b48c4fe29d",
       token: "",
     },
-    products: [],
+    formData: {
+      userName: "",
+      email: "",
+      phone: "",
+      address: "",
+      type: "",
+      remark: "",
+    },
     productsPagination: {},
     metaProduct: {
       imageUrl: [],
     },
+    isLoading: false,
   },
-  created() {
-    this.userData.token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/,
-      "$1"
-    );
-    // 預設帶入 token
-    axios.defaults.headers.common.Authorization = `Bearer ${this.userData.token}`;
-
-    // this.getData();
-  },
+  created() { },
   methods: {
-    signIn() {
-      // console.log(this.user);
-      const apiURL = `https://course-ec-api.hexschool.io/api/auth/login`;
-      axios
-        .post(apiURL, this.user)
-        .then((res) => {
-          const token = res.data.token;
-          const expired = res.data.expired;
-          this.userData.uuid = res.data.uuid;
-          console.log(res.data.uuid);
-          // write cookie & expire date
-          document.cookie = `token=${token};expires=${new Date(
-            expired * 1000
-          )}; path=/`;
-          window.location = "./Product.html";
-        })
-        .catch((error) => {
-          alert(error);
-        });
-    },
-    openModal(action, item) {
-      switch (action) {
-        case "isAdd": {
-          this.metaProduct = { imageUrl: [] };
-          $("#productModal").modal("show");
-          break;
-        }
-        case "isEdit": {
-          const apiURL = `${this.userData.apiPath}api/${this.userData.uuid}/admin/ec/product/${item.id}`;
-          axios.get(apiURL).then((res) => {
-            (this.metaProduct = res.data.data),
-              $("#productModal").modal("show");
-          });
-          break;
-        }
-        case "isDelete": {
-          this.metaProduct = JSON.parse(JSON.stringify(item));
-          $("#deleteModal").modal("show");
-          break;
-        }
-        default:
-          break;
-      }
-    },
-    getData(num = 1) {
-      console.log(num);
-      const apiURL = `${this.userData.apiPath}api/${this.userData.uuid}/admin/ec/products?page=${num}`;
-      axios.get(apiURL).then((res) => {
-        this.products = res.data.data;
-        this.productsPagination = res.data.meta.pagination;
-        if (this.metaProduct) {
-          this.metaProduct = { imageUrl: [] };
-          $("#productModal").modal("hide");
-        }
-      });
-    },
-    deleteProduct(item) {
-      if (item.id) {
-        const apiURL = `${this.userData.apiPath}api/${this.userData.uuid}/admin/ec/product/${item.id}`;
-        axios.delete(apiURL, item.id).then((res) => {
-          console.log(res);
-          this.getData();
-          $("#deleteModal").modal("hide");
-        });
-      }
+    test() {
+      console.log("test");
     },
   },
 });

@@ -3,7 +3,6 @@ import modal from "./modal.js";
 
 Vue.component("pagination", pagination);
 Vue.component("modal", modal);
-Vue.use(VueLoading);
 Vue.component("loading", VueLoading);
 
 new Vue({
