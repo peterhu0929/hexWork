@@ -2,52 +2,245 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" type="text/css" href="week5.css" />
-  <link href="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3/dist/vue-loading.css" rel="stylesheet" />
-  <title>第五周主線任務</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="week5.css" />
+    <link href="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3/dist/vue-loading.css" rel="stylesheet" />
+    <title>第五周主線任務</title>
 </head>
 
 <body>
-  <div id="app">
-    <h3 class="title">{{message}}</h3>
-    <loading :active.sync="isLoading"></loading>
-    <validation-observer v-slot="{ invalid }">
-      <form @submit.prevent="submitForm">
-        <validation-provider rules="required" v-slot="{ errors ,classes }">
-          <label for="email">收件人姓名</label>
-          <input type="text" name="userName" v-model="formData.userName" class="form-control" :class="classes" />
-          <span class="invalid-feedback">{{ errors[0] }}</span>
-        </validation-provider>
-        <validation-provider rules="required|email" v-slot="{ errors ,classes }">
-          <label for="email">Email</label>
-          <input type="email" name="email" v-model="formData.email" class="form-control" :class="classes" />
-          <span class="invalid-feedback">{{ errors[0] }}</span>
-        </validation-provider>
-        <validation-provider rules="required|min:8" v-slot="{ errors ,classes }">
-          <label for="email">電話</label>
-          <input type="tel" name="phone" v-model="formData.phone" class="form-control" :class="classes" />
-          <span class="invalid-feedback">{{ errors[0] }}</span>
-        </validation-provider>
-        <validation-provider rules="required" v-slot="{ errors ,classes }">
-          <label for="email">地址</label>
-          <input type="text" name="address" v-model="formData.address" class="form-control" :class="classes" />
-          <span class="invalid-feedback">{{ errors[0] }}</span>
-        </validation-provider>
-        <!-- 送出表單使用 submit 的方法，如果驗證未通過則 disabled 該按鈕 -->
-        <button type="submit" class="btn btn-info" :disabled="invalid">送出</button>
-      </form>
-    </validation-observer>
-  </div>
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/3.3.0/vee-validate.full.min.js"></script>
-  <script src="week5.js" type="module"></script>
+    <div id="app">
+        <h3 class="title">{{message}}</h3>
+        <loading :active.sync="isLoading"></loading>
+        <validation-observer v-slot="{ invalid }">
+            <form @submit.prevent="submitForm(formData)">
+                <validation-provider rules="required" v-slot="{ errors ,classes }">
+                    <label>收件人姓名</label>
+                    <input type="text" name="name" v-model="formData.name" class="form-control" :class="classes" />
+                    <span class="invalid-feedback">{{ errors[0] }}</span>
+                </validation-provider>
+                <validation-provider rules="required|email" v-slot="{ errors ,classes }">
+                    <label>Email</label>
+                    <input type="email" name="email" v-model="formData.email" class="form-control" :class="classes" />
+                    <span class="invalid-feedback">{{ errors[0] }}</span>
+                </validation-provider>
+                <validation-provider rules="required|min:8" v-slot="{ errors ,classes }">
+                    <label>電話</label>
+                    <input type="tel" name="tel" v-model="formData.tel" class="form-control" :class="classes" />
+                    <span class="invalid-feedback">{{ errors[0] }}</span>
+                </validation-provider>
+                <validation-provider rules="required" v-slot="{ errors ,classes }">
+                    <label>地址</label>
+                    <input type="text" name="address" v-model="formData.address" class="form-control" :class="classes" />
+                    <span class="invalid-feedback">{{ errors[0] }}</span>
+                </validation-provider>
+                <validation-provider rules="required" v-slot="{ errors ,classes }">
+                    <label>付款方式</label>
+                    <select v-model="formData.payment" name="payment" class="form-control" :class="classes">
+                        <option disabled value="">請選擇</option>
+                        <option :value="item.name" v-for="item in paymentMethods" :key="item.name">
+                            {{item.name}}</option>
+                        </select>
+                    <span class="invalid-feedback">{{ errors[0] }}</span>
+                </validation-provider>
+                <label>留言</label>
+                <textarea v-model="formData.remark" class="form-control"></textarea>
+                <!-- 送出表單使用 submit 的方法，如果驗證未通過則 disabled 該按鈕 -->
+                <button type="submit" class="btn btn-info" style="float: right;" :disabled="invalid">送出</button>
+            </form>
+        </validation-observer>
+        <!-- 產品列表 start -->
+        <div class="row mt-4">
+            <div v-for="(item, index) in products" :key="item.id" class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div style="height: 150px; background-size: cover; background-position: center" :style="{backgroundImage: `url(${item.imageUrl})`}"></div>
+                    <div class="card-body">
+                        <span class="badge badge-secondary float-right ml-2">{{ item.category }}</span>
+                        <h5 class="card-title">
+                            <a href="#" class="text-dark">{{ item.title }}</a>
+                        </h5>
+                        <p class="card-text" v-html="item.content">
+                            {{ item.content }}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <!-- 售價 (price) 欄位是可選的，因此售價若為空，就顯示原價 (origin_price)
+                售價若不為空，就顯示原價 (origin_price) 與售價 (price) -->
+                            <div v-if="!item.price" class="h5">
+                                {{item.origin_price}} 元
+                            </div>
+                            <div v-else>
+                                <del class="h6"> 原價 {{item.origin_price}} 元 </del>
+                                <div class="h5">
+                                    現在只要 <strong>{{item.price}}</strong> 元
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex">
+                        <button type="button" class="btn btn-primary btn-sm" :disabled="status.loadingItem === item.id" @click="getDetailed(item.id)">
+                            查看更多
+                            <i v-if="status.loadingItem === item.id" class="spinner-grow spinner-grow-sm"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm ml-auto" :disabled="status.loadingItem === item.id" @click="add2Cart(item.id)">
+                            加到購物車
+                            <i v-if="status.loadingItem === item.id" class="spinner-grow spinner-grow-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 產品列表 end -->
+        <!-- 產品詳細 Modal start -->
+        <div id="productModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>
+                            {{ metaProduct.title }}
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                             <span aria-hidden="true">&times;</span>
+                         </button>
+                    </div>
+                    <div class="modal-body">
+                        <img :src="metaProduct.imageUrl" class="img-fluid" alt>
+                        <blockquote class="blockquote mt-3">
+                            <p class="mb-0" v-html="metaProduct.content"></p>
+                            <footer class="blockquote-footer text-right">
+                                {{ metaProduct.description }}
+                            </footer>
+                        </blockquote>
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <div v-if="!metaProduct.price" class="h4">
+                                {{metaProduct.origin_price}} 元
+                            </div>
+                            <del v-if="metaProduct.price" class="h6"> 原價 {{metaProduct.origin_price}} 元 </del>
+                            <div v-if="metaProduct.price" class="h4">
+                                現在只要 {{metaProduct.price}} 元
+                            </div>
+                        </div>
+                        <select v-model="metaProduct.num" name class="form-control mt-3">
+                             <option value="0" disabled selected>
+                                 請選擇數量
+                             </option>
+                             <option v-for="num in 15" :key="num" :value="num">
+                                 選購 {{num}} {{ metaProduct.unit }}
+                             </option>
+                         </select>
+                    </div>
+                    <div class="modal-footer">
+                        <div v-if="metaProduct.num" class="text-muted text-nowrap mr-3">
+                            小計
+                            <strong>{{ metaProduct.num * metaProduct.price }}</strong> 元
+                        </div>
+                        <button type="button" class="btn btn-primary" @click="add2Cart(metaProduct.id, metaProduct.num)">
+                             <i v-if="metaProduct.id === status.loadingItem" class="fas fa-spinner fa-spin"></i>
+                             加到購物車
+                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 產品詳細 Modal end -->
+        <!-- 購物車頁面 start -->
+        <div class="my-5 row justify-content-center">
+            <loading :active.sync="isLoadingCart"></loading>
+            <div class="col-md-6">
+                <div class="text-right mb-3">
+                    <button type="button" class="btn btn-outline-danger btn-sm" @click="removeAllCartItem()">
+                        <i class="far fa-trash-alt"> 刪除所有品項 </i>
+                    </button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <th> 刪除 </th>
+                        <th> 品名 </th>
+                        <th width="150px">
+                            數量
+                        </th>
+                        <th> 單位 </th>
+                        <th> 單價 </th>
+                    </thead>
+                    <tbody v-if="cart.length">
+                        <tr v-for="item in cart" :key="item.product.id">
+                            <td class="align-middle">
+                                <button type="button" class="btn btn-outline-danger btn-sm" @click="removeCartItem(item.product.id)">
+                                &times;
+                                </button>
+                            </td>
+                            <td class="align-middle">
+                                {{ item.product.title }}
+                            </td>
+                            <td class="align-middle">
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary" type="button" @click="updateQuantity(item.product.id, item.quantity - 1)" :disabled="item.quantity===1">
+                                            -
+                                        </button>
+                                    </div>
+                                    <input min="1" type="number" class="form-control text-center" v-model=item.quantity @change="updateQuantity(item.product.id,item.quantity)">
+
+                                    <!-- @keyup.enter="quantityUpdate(item.product.id, $event.target.value)" -->
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-primary" type="button" @click="updateQuantity(item.product.id, item.quantity + 1)">
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                {{ item.product.unit }}
+                            </td>
+                            <td class="align-middle text-right">
+                                {{ item.product.price }}
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-right">
+                                總計
+                            </td>
+                            <td class="text-right">
+                                {{ cartTotal }}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- 購物車頁面 end -->
+        <!-- 完成訂單 Modal start -->
+        <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> 完成訂單 </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p> 恭喜完成訂單，請等候商品出貨</p>
+                        <p> 訂購時間:{{this.orderTime}}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"> 關閉 </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 完成訂單 Modal end -->
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/3.3.0/vee-validate.full.min.js"></script>
+    <script src="week5.js" type="module"></script>
 </body>
 
 </html>
