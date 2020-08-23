@@ -14,43 +14,7 @@
     <div id="app">
         <h3 class="title">{{message}}</h3>
         <loading :active.sync="isLoading"></loading>
-        <validation-observer v-slot="{ invalid }">
-            <form @submit.prevent="submitForm(formData)">
-                <validation-provider rules="required" v-slot="{ errors ,classes }">
-                    <label>收件人姓名</label>
-                    <input type="text" name="name" v-model="formData.name" class="form-control" :class="classes" />
-                    <span class="invalid-feedback">{{ errors[0] }}</span>
-                </validation-provider>
-                <validation-provider rules="required|email" v-slot="{ errors ,classes }">
-                    <label>Email</label>
-                    <input type="email" name="email" v-model="formData.email" class="form-control" :class="classes" />
-                    <span class="invalid-feedback">{{ errors[0] }}</span>
-                </validation-provider>
-                <validation-provider rules="required|min:8" v-slot="{ errors ,classes }">
-                    <label>電話</label>
-                    <input type="tel" name="tel" v-model="formData.tel" class="form-control" :class="classes" />
-                    <span class="invalid-feedback">{{ errors[0] }}</span>
-                </validation-provider>
-                <validation-provider rules="required" v-slot="{ errors ,classes }">
-                    <label>地址</label>
-                    <input type="text" name="address" v-model="formData.address" class="form-control" :class="classes" />
-                    <span class="invalid-feedback">{{ errors[0] }}</span>
-                </validation-provider>
-                <validation-provider rules="required" v-slot="{ errors ,classes }">
-                    <label>付款方式</label>
-                    <select v-model="formData.payment" name="payment" class="form-control" :class="classes">
-                        <option disabled value="">請選擇</option>
-                        <option :value="item.name" v-for="item in paymentMethods" :key="item.name">
-                            {{item.name}}</option>
-                        </select>
-                    <span class="invalid-feedback">{{ errors[0] }}</span>
-                </validation-provider>
-                <label>留言</label>
-                <textarea v-model="formData.remark" class="form-control"></textarea>
-                <!-- 送出表單使用 submit 的方法，如果驗證未通過則 disabled 該按鈕 -->
-                <button type="submit" class="btn btn-info" style="float: right;" :disabled="invalid">送出</button>
-            </form>
-        </validation-observer>
+
         <!-- 產品列表 start -->
         <div class="row mt-4">
             <div v-for="(item, index) in products" :key="item.id" class="col-md-4 mb-4">
@@ -204,7 +168,7 @@
                                 總計
                             </td>
                             <td class="text-right">
-                                {{ cartTotal }}
+                                {{ cartTotal|money }}
                             </td>
                         </tr>
                     </tfoot>
@@ -212,6 +176,43 @@
             </div>
         </div>
         <!-- 購物車頁面 end -->
+        <validation-observer v-slot="{ invalid }">
+            <form @submit.prevent="submitForm(formData)">
+                <validation-provider rules="required" v-slot="{ errors ,classes }">
+                    <label>收件人姓名</label>
+                    <input type="text" name="name" v-model="formData.name" class="form-control" :class="classes" />
+                    <span class="invalid-feedback">{{ errors[0] }}</span>
+                </validation-provider>
+                <validation-provider rules="required|email" v-slot="{ errors ,classes }">
+                    <label>Email</label>
+                    <input type="email" name="email" v-model="formData.email" class="form-control" :class="classes" />
+                    <span class="invalid-feedback">{{ errors[0] }}</span>
+                </validation-provider>
+                <validation-provider rules="required|min:8" v-slot="{ errors ,classes }">
+                    <label>電話</label>
+                    <input type="tel" name="tel" v-model="formData.tel" class="form-control" :class="classes" />
+                    <span class="invalid-feedback">{{ errors[0] }}</span>
+                </validation-provider>
+                <validation-provider rules="required" v-slot="{ errors ,classes }">
+                    <label>地址</label>
+                    <input type="text" name="address" v-model="formData.address" class="form-control" :class="classes" />
+                    <span class="invalid-feedback">{{ errors[0] }}</span>
+                </validation-provider>
+                <validation-provider rules="required" v-slot="{ errors ,classes }">
+                    <label>付款方式</label>
+                    <select v-model="formData.payment" name="payment" class="form-control" :class="classes">
+                        <option disabled value="">請選擇</option>
+                        <option :value="item.name" v-for="item in paymentMethods" :key="item.name">
+                            {{item.name}}</option>
+                    </select>
+                    <span class="invalid-feedback">{{ errors[0] }}</span>
+                </validation-provider>
+                <label>留言</label>
+                <textarea v-model="formData.remark" class="form-control"></textarea>
+                <!-- 送出表單使用 submit 的方法，如果驗證未通過則 disabled 該按鈕 -->
+                <button type="submit" class="btn btn-info" style="float: right;" :disabled="invalid">送出</button>
+            </form>
+        </validation-observer>
         <!-- 完成訂單 Modal start -->
         <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -224,7 +225,7 @@
                     </div>
                     <div class="modal-body">
                         <p> 恭喜完成訂單，請等候商品出貨</p>
-                        <p> 訂購時間:{{this.orderTime}}</p>
+                        <p> 訂購時間:{{this.orderTime|date4View}}</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"> 關閉 </button>
