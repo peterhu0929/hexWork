@@ -17,7 +17,7 @@ Vue.component('ValidationProvider', VeeValidate.ValidationProvider);
 // 將 VeeValidate 完整表單 驗證工具載入 作為全域註冊
 Vue.component('ValidationObserver', VeeValidate.ValidationObserver);
 
-Vue.filter('money', function(value) {
+Vue.filter('currency', function(value) {
     var parts = value.toString().split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return '$' + parts.join('.');
@@ -25,7 +25,6 @@ Vue.filter('money', function(value) {
 Vue.filter('date4View', function(value) {
     const pDate = new Date(value);
     return `${pDate.getFullYear()}/${pDate.getMonth() + 1}/${pDate.getUTCDate()}`;
-
 });
 new Vue({
     el: "#app",
@@ -67,12 +66,10 @@ new Vue({
                 name: "GooglePay",
             },
         ],
-        productsPagination: {},
         metaProduct: {
             imageUrl: [],
         },
         isLoading: false,
-        isLoadingCart: false,
         status: {
             loadingItem: '',
         },
@@ -84,7 +81,6 @@ new Vue({
     created() {
         this.getProducts();
         this.getCart();
-        this.orderTime = new Date();
     },
     methods: {
         submitForm(inputData) {
