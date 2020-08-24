@@ -92,6 +92,7 @@ new Vue({
                 this.isLoading = false;
                 this.orderTime = new Date();
                 $('#orderModal').modal("show");
+                this.getCart();
             }).catch(error => {
                 this.isLoading = false;
                 alert(error.response.data.errors);
