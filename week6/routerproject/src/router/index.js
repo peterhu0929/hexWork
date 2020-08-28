@@ -6,6 +6,7 @@ import Products from "../views/Products.vue";
 import Order from "../views/Order.vue";
 import OrderFinish from "../views/OrderFinish.vue";
 import Dashboard from "../views/dashboard/Dashboard.vue";
+import Product from "../views/Product.vue";
 
 Vue.use(VueRouter);
 
@@ -24,6 +25,9 @@ const routes = [{
     }, {
         path: "/products",
         component: Products
+    }, {
+        path: "/product/:id",
+        component: Product
     }, {
         path: "/order",
         component: Order

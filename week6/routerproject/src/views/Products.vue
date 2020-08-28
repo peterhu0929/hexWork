@@ -7,11 +7,18 @@
     <th>Title</th>
     <th>Description</th>
     <th>Price</th>
+    <th>Detail</th>
   </tr>
   <tr v-for="item in products" :key="item.id">
     <td>{{item.title}}</td>
     <td>{{item.content}}</td>
     <td>{{item.price}}</td>
+    <td>
+      <router-link :to="`/product/${item.id}`">Detail</router-link>
+    </td>
+    <td>
+      <button @click="goPage(item.id)">Detail</button>
+      </td>
   </tr>
   
 </table>
@@ -38,6 +45,9 @@ export default {
                 this.isLoading=false;
                 console.log(this.products);
             })
+        },
+        goPage(id){
+          this.$router.push(`/product/${id}`);
         }
     },
 }
