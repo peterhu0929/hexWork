@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <style>
+        .completed {
+            text-decoration: line-through;
+            font-weight: bold;
+        }
+    </style>
+    <h2 class="title">第一周主線任務-關注點分離</h2>
+</head>
+
+<body>
+    <div id="app" class="container my-3">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text"> 待辦事項 </span>
+            </div>
+            <input type="text" class="form-control" placeholder=" 準備要做的任務 " id="newTodo">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button" id="addTodo"> 新增 </button>
+            </div>
+        </div>
+        <div class="card text-center">
+            <ul class="list-group list-group-flush text-left" id="todoList">
+            </ul>
+            <div class="card-footer d-flex justify-content-between">
+                <span> 還有 <span id="taskCount">0</span> 筆任務 </span>
+                <a href="#" id="clearTask"> 清除所有任務 </a>
+            </div>
+        </div>
+    </div>
+    <script>
+        var newTodoInput = document.querySelector("#newTodo");
+        // console.log(newTodoInput.value);
+        var addTodoBtn = document.querySelector('#addTodo').addEventListener('click', addTask);
+        var clearTaskBtn = document.querySelector('#clearTask').addEventListener('click', deleteAllTask)
+        var taskCount = document.querySelector('#taskCount');
+
+        var todoList = document.querySelector("#todoList");
+        todoList.addEventListener('click', updateTask);
+
+
+        var todoData = [];
+        renderPage(todoData);
+
+        function addTask() {
+            var newData = newTodoInput.value.trim();
+            var id = Math.round(Date.now());
+            if (newData !== '') {
+                todoData.push({
+                    id,
+                    value: newData,
+                    completed: false,
+                })
+            }
+            console.log(todoData);
+            renderPage(todoData);
+        }
+
+        function deleteTask(id) {
+            if (id !== '') {
+                todoData.forEach(
+                    (x, i) => {
+                        if (x.id === id) {
+                            todoData.splice(i, 1);
+                        }
+                    }
+                )
+                renderPage(todoData);
+            }
+        }
+
+        function deleteAllTask(e) {
+            e.preventDefault();
+            todoData = [];
+            renderPage(todoData);
+        }
+
+
+        function completeTodo(id) {
+            todoData.forEach((item) => {
+                if (id == item.id) {
+                    item.completed = item.completed ? false : true;
+                }
+            })
+            renderPage(todoData);
+        }
+
+        function updateTask(e) {
+            console.log(e);
+            var action = e.target.parentNode.dataset.action;
+            var id = e.target.parentNode.dataset.id;
+            console.log(e.target.parentNode.dataset);
+            if (action == 'remove') {
+                deleteTask(Number(id))
+            } else if (action === 'complete') {
+                completeTodo(id)
+            }
+        }
+
+
+        function renderPage(data) {
+            var viewHtml = '';
+            data.forEach((item) => {
+                viewHtml += `<li class="list-group-item">
+            <div class="d-flex">
+                <div class="form-check" data-action="complete" data-id="${item.id}">
+                    <input type="checkbox" class="form-check-input" ${item.completed ? 'checked' : '' }>
+                    <label class="form-check-label ${item.completed?'completed':''}"> ${item.value}</label>
+                </div>
+                <button type="button" class="close ml-auto remove" aria-label="Close" data-action="remove"
+                    data-id="${item.id}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </li>`;
+            })
+            todoList.innerHTML = viewHtml;
+            taskCount.textContent = data.length;
+        }
+    </script>
+</body>
+
+</html>
