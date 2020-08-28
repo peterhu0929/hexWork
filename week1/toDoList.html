@@ -36,19 +36,23 @@
         </div>
     </div>
     <script>
+        //輸入新任務
         var newTodoInput = document.querySelector("#newTodo");
-        // console.log(newTodoInput.value);
+        //新增任務按鈕
         var addTodoBtn = document.querySelector('#addTodo').addEventListener('click', addTask);
+        //清除任務按鈕
         var clearTaskBtn = document.querySelector('#clearTask').addEventListener('click', deleteAllTask)
+            //任務總數量
         var taskCount = document.querySelector('#taskCount');
-
+        //任務清單列表
         var todoList = document.querySelector("#todoList");
         todoList.addEventListener('click', updateTask);
 
-
+        // 任務清單初始化
         var todoData = [];
         renderPage(todoData);
 
+        // 新增一筆任務
         function addTask() {
             var newData = newTodoInput.value.trim();
             var id = Math.round(Date.now());
@@ -62,7 +66,7 @@
             console.log(todoData);
             renderPage(todoData);
         }
-
+        // 刪除指定任務
         function deleteTask(id) {
             if (id !== '') {
                 todoData.forEach(
@@ -75,14 +79,13 @@
                 renderPage(todoData);
             }
         }
-
+        // 刪除全部任務
         function deleteAllTask(e) {
             e.preventDefault();
             todoData = [];
             renderPage(todoData);
         }
-
-
+        // 完成該項任務
         function completeTodo(id) {
             todoData.forEach((item) => {
                 if (id == item.id) {
@@ -91,20 +94,19 @@
             })
             renderPage(todoData);
         }
-
+        // 更新任務狀態
         function updateTask(e) {
             console.log(e);
             var action = e.target.parentNode.dataset.action;
             var id = e.target.parentNode.dataset.id;
             console.log(e.target.parentNode.dataset);
-            if (action == 'remove') {
+            if (action == 'remove') { //移除flag
                 deleteTask(Number(id))
-            } else if (action === 'complete') {
+            } else if (action === 'complete') { //完成flag
                 completeTodo(id)
             }
         }
-
-
+        // 任務頁面刷新
         function renderPage(data) {
             var viewHtml = '';
             data.forEach((item) => {
